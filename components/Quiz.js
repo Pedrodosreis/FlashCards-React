@@ -19,16 +19,22 @@ class Quiz extends React.Component {
 		this.setState( { showAnswer: !this.state.showAnswer })
 	}
 
-	handleSubmit = (answer) => {
-
-		const { decks } = this.props;
-  		const deck = this.props.navigation.state.params.entryId;
-
-		if(answer === decks[deck].questions[this.state.qNumber].correctAnswer) {
+	handleCorrect = () => {
 			this.setState( { correct: this.state.correct + 1 })
-		}
-		this.setState( { showAnswer: false, qNumber: this.state.qNumber + 1})
+		  this.setState( { showAnswer: false, qNumber: this.state.qNumber + 1})
 	}
+
+  handleIncorrect = () => {
+    this.setState( { showAnswer: false, qNumber: this.state.qNumber + 1})
+  }
+
+  clearQuizInfo = () => {
+    this.setState( { 
+      showAnswer: false, 
+      qNumber: 0,
+      correct: 0,
+    })
+  }
 
 
   render() {
@@ -46,9 +52,14 @@ class Quiz extends React.Component {
     		<View>
 	      		<Text style={styles.goldLarge}>You got {this.state.correct} of {decks[deck].questions.length} questions, Congratulations !!!</Text>
 
-	      		<TouchableOpacity style={styles.btn} onPress={() => this.props.navigation.navigate('MainPage', {key: null})} 
+	      		<TouchableOpacity style={styles.btn} onPress={() => this.props.navigation.navigate('DeckView', {entryId: deck})} 
 	      					title='Back to Home'> 
-                  <Text>Back to Home</Text>
+                  <Text>Back to Deck</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.btn} onPress={() => this.clearQuizInfo()} 
+                  title='Back to Home'> 
+                  <Text>Try Again</Text>
             </TouchableOpacity>
       		</View>
       		:
@@ -63,10 +74,10 @@ class Quiz extends React.Component {
                 </TouchableOpacity>
 				: <Text style={styles.goldLarge}>{decks[deck].questions[this.state.qNumber].answer}</Text>}
 
-		        <TouchableOpacity style={styles.btn} onPress={ () => this.handleSubmit('true') } title='Correct'>
+		        <TouchableOpacity style={styles.btn} onPress={ () => this.handleCorrect() } title='Correct'>
               <Text>Correct</Text>
             </TouchableOpacity>
-		        <TouchableOpacity style={styles.btn} onPress={ () => this.handleSubmit('false') } title='Not Correct'>
+		        <TouchableOpacity style={styles.btn} onPress={ () => this.handleIncorrect() } title='Not Correct'>
               <Text>Not Correct</Text>
             </TouchableOpacity>
       		</View>

@@ -11,7 +11,6 @@ class AddCard extends React.Component {
   state = {
     question: '',
     answer: '',
-    correctAnswer: '',
   }
 
   handleQuestionChange = (question) => {
@@ -26,24 +25,17 @@ class AddCard extends React.Component {
       })
   }
 
-  handleCorrectAnswerChange = (correctAnswer) => {
-    this.setState( {
-      correctAnswer: correctAnswer,
-      })
-  }
-
   handlePress = (deck) => {
 
-    const {question, answer, correctAnswer} = this.state;
+    const {question, answer} = this.state;
 
-    this.props.dispatch(addCard( { deck, question, answer, correctAnswer } ));
-    addCardToDeck(deck, { question, answer, correctAnswer } )
+    this.props.dispatch(addCard( { deck, question, answer } ));
+    addCardToDeck(deck, { question, answer } )
     this.props.navigation.dispatch(NavigationActions.back( { key: null }))
 
     this.setState( {
       question: '',
       answer: '',
-      correctAnswer: '',
       })
   }
 
@@ -59,10 +51,6 @@ class AddCard extends React.Component {
 
         <Text style={styles.goldLarge}>Answer</Text>
         <TextInput style={styles.inputLarge} value={this.state.answer} onChangeText={this.handleAnswerChange} />
-
-        <Text style={styles.goldLarge}>Correct Answer</Text>
-        <Text style={styles.goldsmall}>true or false</Text>
-        <TextInput style={styles.inputLarge} value={this.state.correctAnswer} onChangeText={this.handleCorrectAnswerChange} />
 
         <TouchableOpacity style={styles.btn} onPress={() => this.handlePress(deckName)} title='Add to Deck'> 
           <Text>Add to Deck</Text>
