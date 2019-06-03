@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { submitEntry } from '../utils/api'
 import { addDeck } from '../actions/decks'
 
-import { Text, View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 
 class Quiz extends React.Component {
 
@@ -40,7 +40,7 @@ class Quiz extends React.Component {
   	const finished = qNumber === decks[deck].questions.length
 
     return (
-      <View style={styles.fullBox}>
+      <ScrollView style={styles.fullBox}>
     	<View style={styles.box}>
     	{finished ?
     		<View>
@@ -72,7 +72,7 @@ class Quiz extends React.Component {
       		</View>
     	}
     	</View>
-      </View> 	       
+      </ScrollView> 	       
     );
   }
 }
