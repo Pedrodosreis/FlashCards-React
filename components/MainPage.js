@@ -9,7 +9,7 @@ import { Feather } from '@expo/vector-icons'
 class MainPage extends React.Component {
 
   componentDidMount() {
-    clearStorage();
+    // clearStorage();
     getAllDecks()
     .then(decks => this.props.receiveAllDecks(decks))
   }

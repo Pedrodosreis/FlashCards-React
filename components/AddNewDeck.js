@@ -19,7 +19,6 @@ class AddNewDeck extends React.Component {
   }
 
   handlePress = () => {
-    console.log(this.state.text)
 
     submitEntry(this.state.text);
     this.props.dispatch(addDeck(this.state.text));

@@ -9,8 +9,7 @@ export const getDecks = {
     questions: [
       {
         question: 'The modules operator (%) in Java can be used only with variables of integer type.',
-        answer: 'The modulus operator (%) may be used with floating-point as well as integer types. It returns the remainder 
-        of a division operation, e.g., 10 % 6 will return 4.',
+        answer: 'The modulus operator (%) may be used with floating-point as well as integer types. It returns the remainder of a division operation, e.g., 10 % 6 will return 4.',
         correctAnswer: 'false',
       },
       {
@@ -45,11 +44,9 @@ export function getAllDecks (deck) {
 	return AsyncStorage.getItem(FLASHCARDS_STORAGE_KEY)
 		.then( (results) => {
 			if(results === null) {
-				console.log('2')
 				AsyncStorage.setItem(FLASHCARDS_STORAGE_KEY, JSON.stringify(getDecks))
 				return getDecks
 			} else {
-				console.log('3')
 				return JSON.parse(results)
 			}
 		})
