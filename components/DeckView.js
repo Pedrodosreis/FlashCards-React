@@ -1,10 +1,13 @@
 import React from 'react';
 import { Text, View, StyleSheet, TextInput, Button, TouchableOpacity } from 'react-native';
-import { getDecks } from '../utils/helpers.js';
+import { clearLocalNotification, setLocalNotification } from '../utils/helpers.js';
 import { connect } from 'react-redux';
 
-
 class DeckView extends React.Component {
+
+  componentDidMount() {
+    setLocalNotification()
+  }
 
   render() {
     const deck = this.props.navigation.state.params.entryId;
@@ -22,7 +25,10 @@ class DeckView extends React.Component {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.btn} 
-                onPress={ () => { this.props.navigation.navigate('Quiz', { entryId: decks[deck].title }) } }>
+                onPress={ () => {
+                  clearLocalNotification().then(setLocalNotification)
+                  this.props.navigation.navigate('Quiz', { entryId: decks[deck].title }) } 
+                }>
           <Text>Start Quiz</Text>
         </TouchableOpacity>
       </View>

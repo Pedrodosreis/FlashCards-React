@@ -1,44 +1,56 @@
-// utils/helpers.js
+import { AsyncStorage } from 'react-native'
+import { Notifications, Permissions } from 'expo'
 
-export function isBetween (num, x, y) {
-  if (num >= x && num <= y) {
-    return true
+
+const NOTIFICATION_KEY = 'FlashCards:notifications'
+
+export function clearLocalNotification () {
+  return AsyncStorage.removeItem(NOTIFICATION_KEY)
+    .then(Notifications.cancelAllScheduledNotificationsAsync)
+}
+
+function createNotification () {
+  return {
+    title: 'Do your daily Quiz',
+    body: "👋 Do not forget to take your quiz today, there's still time!",
+    ios: {
+      sound: true,
+    },
+    android: {
+      sound: true,
+      priority: 'high',
+      sticky: false,
+      vibrate: true,
+    }
   }
-
-  return false
 }
 
-export function calculateDirection (heading) {
-  let direction = ''
+export function setLocalNotification () {
+  AsyncStorage.getItem(NOTIFICATION_KEY)
+    .then(JSON.parse)
+    .then((data) => {
+      if (data === null) {
+        Permissions.askAsync(Permissions.NOTIFICATIONS)
+          .then(({ status }) => {
+            if (status === 'granted') {
+              Notifications.cancelAllScheduledNotificationsAsync
 
-  if (isBetween(heading, 0, 22.5)) {
-    direction = 'North'
-  } else if (isBetween(heading, 22.5, 67.5)) {
-    direction = 'North East'
-  } else if (isBetween(heading, 67.5, 112.5)) {
-    direction = 'East'
-  } else if (isBetween(heading, 112.5, 157.5)) {
-    direction = 'South East'
-  } else if (isBetween(heading, 157.5, 202.5)) {
-    direction = 'South'
-  } else if (isBetween(heading, 202.5, 247.5)) {
-    direction = 'South West'
-  } else if (isBetween(heading, 247.5, 292.5)) {
-    direction = 'West'
-  } else if (isBetween(heading, 292.5, 337.5)) {
-    direction = 'North West'
-  } else if (isBetween(heading, 337.5, 360)) {
-    direction = 'North'
-  } else {
-    direction = 'Calculating'
+              let tomorrow = new Date()
+              tomorrow.setDate(tomorrow.getDate() + 1)
+               tomorrow.setHours(17)
+              tomorrow.setMinutes(0)              
+
+              Notifications.scheduleLocalNotificationAsync(
+                 createNotification(),
+                  {
+                    time: tomorrow,
+                    repeat: 'day',
+                  }
+              )        
+
+              AsyncStorage.setItem(NOTIFICATION_KEY, JSON.stringify(true))   
+              }         
+          })
+      }
+    })
   }
-
-  return direction
-}
-
-export function timeToString (time = Date.now()) {
-  const date = new Date(time)
-  const todayUTC = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
-  return todayUTC.toISOString().split('T')[0]
-}
-

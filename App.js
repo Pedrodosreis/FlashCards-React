@@ -14,6 +14,9 @@ import Quiz from './components/Quiz'
 
 import { Feather } from '@expo/vector-icons'
 
+import {  setLocalNotification, clearLocalNotification } from './utils/helpers.js';
+
+
 const Tabs = createBottomTabNavigator({
     MainPage: {
       screen: MainPage,
@@ -86,6 +89,7 @@ const MainNavContainer = createAppContainer(MainNav);
 export default class App extends React.Component {
 
   componentDidMount() {
+    setLocalNotification()    
   }
 
   render() {
